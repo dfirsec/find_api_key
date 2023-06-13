@@ -10,6 +10,8 @@ Python 3.8 or higher
 
 ## Installation
 
+Script utilizes standard Python libraries.
+
 1. Clone the repository:
 
 ```text
