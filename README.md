@@ -32,10 +32,10 @@ cd find_api_key
 python find_api_key.py /path/to/directory
 ```
 
-To specify a custom key name for the script to search for, use the -a or --api flag followed by the key name:
+To specify a custom key name for the script to search for, use the --api flag followed by the key name:
 
 ```text
-python find_api_key.py /path/to/directory --api custom_key
+python find_api_key.py /path/to/directory --api "api-custom-key"
 ```
 
 ### Example
@@ -47,7 +47,7 @@ python find_api_key.py /path/to/directory
 This will scan the specified directory for API key references in files and display the results. The results will contain the file path, the line number where the API key references was found, and the actual API key.
 
 ```text
-python find_api_key.py /path/to/directory --api custom_key
+python find_api_key.py /path/to/directory --api "api-custom-key"
 ```
 
 This will scan the specified directory for custom key name references in files and display the results:
