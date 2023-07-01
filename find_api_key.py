@@ -1,101 +1,106 @@
-"""Find API key references in files."""
+"""Find API keys in a directory."""
 
 import argparse
-import contextlib
-import multiprocessing
-import re
 import sys
-from functools import partial
-from pathlib import Path
+import textwrap
+
+from modules.api_key_finder import find_api_key_references
+from modules.pattern_seeker import get_other_patterns
+from modules.pattern_seeker import get_patterns
+
+# ANSI escape sequences for colored output
+C_CYAN = "\033[96m"
+C_GREEN = "\033[92m"
+C_YELLOW = "\033[93m"
+C_END = "\033[0m"
 
 
-def check_file(file_path: Path, api_key_regexes: dict) -> tuple[Path, list[int], list[str]] | None:
-    """Checks files in a given directory for API key references.
-
-    Args:
-        file_path (Path): Path to the file to check.
-        api_key_regexes (dict): Dictionary of file extensions and their regex patterns.
-
-    Returns:
-        Tuple containing the file path, line numbers, and API key values found.
-    """
-    file_ext = file_path.suffix
-    if file_ext in api_key_regexes:
-        line_numbers = []
-        api_keys = []
-        with contextlib.suppress(OSError):
-            with file_path.open(encoding="utf-8", errors="ignore") as file:
-                for line_no, line in enumerate(file, start=1):
-                    match = api_key_regexes[file_ext].search(line)
-                    if match:
-                        # only extract alphanumeric characters and underscore from the matched key
-                        matched_key = re.sub(r"\W", "", match.group(1).lower())
-                        if "key" not in matched_key and "api" not in matched_key:
-                            line_numbers.append(line_no)
-                            api_keys.append(matched_key)
-            if line_numbers and api_keys:
-                return file_path, line_numbers, api_keys
-    return None
+def check_python_version() -> bool:
+    """Check if the Python version is 3.11 or higher."""
+    major, minor = sys.version_info[:2]
+    return major > 3 or (major == 3 and minor >= 11)
 
 
-def find_api_key_references(root_dir: str, api: str) -> list[tuple[Path, list[int], list[str]]]:
-    """Searches for API key references in files using regex and multiprocessing.
+def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> None:
+    """Outputs all API keys found.
 
     Args:
-        root_dir (str): Directory to search for files containing API key references.
+        dirpath (str): Path to the directory to search in.
         api (str): API key to search for.
-
-
-    Returns:
-        List of tuples containing the file path, line numbers, and API key values found.
+        other (bool): Whether to use the other hardcoded patterns.
+        exclude_keywords (list[str]): List of keywords to exclude.
     """
-    patterns = {
-        ".bashrc": re.compile(rf"export\s+{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".cfg": re.compile(rf"{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".conf": re.compile(rf"{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".config": re.compile(rf"\b{api}\s*=\s*(\w+)", re.IGNORECASE),
-        ".dockerfile": re.compile(rf"ENV\s+{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".ini": re.compile(rf"{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".json": re.compile(rf"\"{api}\"\s*:\s*\"(.+)\"", re.IGNORECASE),
-        ".php": re.compile(rf"\${api}\s*=\s*\'(\w+)\'", re.IGNORECASE),
-        ".properties": re.compile(rf"{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".py": re.compile(rf'\b{api}\s*=\s*["\'](\w+)["\']', re.IGNORECASE),
-        ".toml": re.compile(rf"{api}\s*=\s*(.+)", re.IGNORECASE),
-        ".xml": re.compile(rf"<{api}>\s*(.*)\s*</{api}>", re.IGNORECASE),
-        ".yaml": re.compile(rf"\b{api}\s*:\s*(\w+)", re.IGNORECASE),
-        ".yml": re.compile(rf"\b{api}\s*:\s*(\w+)", re.IGNORECASE),
-    }
+    if exclude_keywords is None:
+        exclude_keywords = [
+            "api_key",
+            "apikey",
+            "api key",
+            "api",
+            "key",
+            "none",
+            "null",
+            "test",
+            "username",
+            "password",
+            "passwd",
+        ]
+    else:
+        exclude_keywords += [
+            "api_key",
+            "apikey",
+            "api key",
+            "api",
+            "key",
+            "none",
+            "null",
+            "test",
+            "username",
+            "password",
+            "passwd",
+        ]
 
-    with multiprocessing.Pool() as pool:
-        files = list(Path(root_dir).rglob("*"))
-        all_results = pool.map(partial(check_file, api_key_regexes=patterns), files)
+    api_reference = f"{C_GREEN}other hardcoded api key{C_END}" if other else f"{C_GREEN}{api}{C_END}"
+    print(f"Searching for {api_reference} references in files...")
 
-    return [result for result in all_results if result]
+    # Get the patterns to use
+    patterns = get_other_patterns() if other else get_patterns(api)
 
+    results = find_api_key_references(dirpath, exclude_keywords, patterns)
 
-def main(root_dir: str, api: str) -> None:
-    """Main function."""
-    api_ref = f"\033[96m{api}\033[0m"
-    try:
-        print(f"Searching for {api_ref} references in files...")
-        files_with_api_key = find_api_key_references(root_dir, api)
-        if files_with_api_key:
-            print(f"\nFiles containing {api_ref} references:\n{'-' * 35}")
-            for file_path, line_numbers, api_keys in files_with_api_key:
-                print(f"{file_path} (lines: {', '.join(map(str, line_numbers))}), \033[93m{', '.join(api_keys)}\033[0m")
-        else:
-            print(f"No files found containing {api_ref} references.")
-    except KeyboardInterrupt:
-        print("\nExecution interrupted by user!")
-        sys.exit(0)
+    if results:
+        for file_path, line_numbers, api_keys, descriptions in results:
+            print(f"\n{C_CYAN}{file_path}{C_END}:")
+            for line_no, api_key, description in zip(line_numbers, api_keys, descriptions, strict=True):
+                # Wrap the API key to 100 characters
+                wrapped_api_key = textwrap.fill(api_key, width=100)
+                print(f"  {C_GREEN}Line {line_no}{C_END}: {C_YELLOW}{wrapped_api_key}{C_END} ({description})")
+    else:
+        print("No API keys found.")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Find API key references in files.")
-    parser.add_argument("root_dir", help="Directory to search for files containing API key references.")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dirpath", help="Directory to search for files containing API key references.")
     parser.add_argument(
-        "-a", "--api", help="Key to search for. Default is 'api_key'.", default="api_key", required=False
+        "--api",
+        type=str,
+        default="api_key",
+        required=False,
+        help="API key to search for. Default is 'api_key'.",
+    )
+    parser.add_argument("--other", action="store_true", help="Use other hardcoded patterns.")
+    parser.add_argument(
+        "--exclude",
+        type=str,
+        nargs="*",
+        default=[],
+        help="Space-separated list of additional keywords to exclude.",
     )
     parser.add_argument("-v", "--version", action="version", version="%(prog)s 0.1.0")
     args = parser.parse_args()
-    main(args.root_dir, args.api)
+
+    if not check_python_version():
+        print("Python version is less than 3.11")
+        sys.exit(1)
+
+    main(args.dirpath, args.api, args.other, args.exclude)
