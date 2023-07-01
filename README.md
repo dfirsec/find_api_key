@@ -59,16 +59,26 @@ Searching for api_key references in files...
 
 Files containing api_key references:
 -----------------------------------
-<DIRECTORY>\check_rep\settings.yml (lines: 2), ms5xxvszc0obohd0iu04axtyz8yb28ndn
-<DIRECTORY>\general_scripts\abuseipdb.py (lines: 20), ji4bh27m9chw1p2prica2qgmuhsyxqjfo4c30ntgxj0kx3w7s49gvq6fhvyvzt0v9rzwq4w17i61phnz
-<DIRECTORY>\pythoncode\general\url_shortener.py (lines: 5), qe8s4jydfc0o3zw1mo1u8okbl6pqiy94pqerg
-<DIRECTORY>\shodan-scripts\androidcam\androidcam.py (lines: 9), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\assets\assets.py (lines: 14), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\cams\cams.py (lines: 15), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\fos-streamer\fos.py (lines: 15), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\IP Webcam\ipwebcam.py (lines: 17), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\simplehttp\simple.py (lines: 19), z719pelyjoa4nrs93mgsu01vnx97zhty
-<DIRECTORY>\shodan-scripts\weblogic\weblogic.py (lines: 19), z719pelyjoa4nrs93mgsu01vnx97zhty
+<DIRECTORY>\check_rep\settings.yml:
+  Lines 2: ms5xxvszc0obohd0iu04axtyz8yb28ndn (User API Key)
+<DIRECTORY>\general_scripts\abuseipdb.py"
+  Line 20: ji4bh27m9chw1p2prica2qgmuhsyxqjfo4c30ntgxj0kx3w7s49gvq6fhvyvzt0v9rzwq4w17i61phnz (User API Key)
+<DIRECTORY>\pythoncode\general\url_shortener.py:
+  Line 5: qe8s4jydfc0o3zw1mo1u8okbl6pqiy94pqerg (User API Key)
+<DIRECTORY>\shodan-scripts\androidcam\androidcam.py:
+  Line 9: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\assets\assets.py:
+  Line 14: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\cams\cams.py:
+  Line 15: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\fos-streamer\fos.py:
+  Line 15: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\IP Webcam\ipwebcam.py:
+  Line 17: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\simplehttp\simple.py:
+  Line 19: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+<DIRECTORY>\shodan-scripts\weblogic\weblogic.py:
+  Line 62: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
 ```
 
 
