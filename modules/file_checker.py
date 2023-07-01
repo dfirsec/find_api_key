@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from re import Pattern
 
-# Maximum file size in bytes
+# Limit the maximum file size in bytes
 MAX_FILE_SIZE = 100000  # 100 KB
 
 # Skip non-text files
