@@ -4,13 +4,15 @@ import re
 from pathlib import Path
 from re import Pattern
 
-import tomllib
+from ruamel.yaml import YAML
 
-PATTERNS_FILEPATH = str(Path(__file__).parent.parent / "patterns.toml")
+yaml = YAML()
+
+PATTERNS_FILEPATH = str(Path(__file__).parent.parent / "patterns.yaml")
 
 # Read the TOML file
-with open(PATTERNS_FILEPATH, "rb") as tome_file:
-    patterns_data = tomllib.load(tome_file)
+with open(PATTERNS_FILEPATH, "rb") as patterns_file:
+    patterns_data = yaml.load(patterns_file)
 
 # Get patterns from the loaded patterns data
 PATTERNS = patterns_data["pattern"]
