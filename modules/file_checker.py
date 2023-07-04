@@ -140,9 +140,20 @@ def check_file(
                     api_value = re.split(r"=|:", api_key, 1, flags=re.IGNORECASE)[-1].strip()
                     if (
                         api_value
-                        and api_value not in ('""', '"', "''", "'")  # Exclude empty strings and empty quotes
+                        and api_value not in ('""', '"', "''", "'")  # exclude empty strings and empty quotes
                         and all(keyword.lower() not in api_value.lower() for keyword in exclude_keywords_set)
-                        and not has_base64(line, api_key)  # Exclude base64 encoded strings
+                        and not has_base64(line, api_key)  # exclude base64 encoded strings
+                        and all(
+                            x not in api_key
+                            for x in [
+                                " == ",
+                                " != ",
+                                " <= ",
+                                " >= ",
+                                " < ",
+                                " > ",
+                            ]
+                        )  # exclude any comparison operators
                     ):
                         line_numbers.append(line_no)
                         api_keys.append(api_key)

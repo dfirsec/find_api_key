@@ -16,9 +16,9 @@ C_END = "\033[0m"
 
 
 def check_python_version() -> bool:
-    """Check if the Python version is 3.11 or higher."""
+    """Check if the Python version is 3.8 or higher."""
     major, minor = sys.version_info[:2]
-    return major > 3 or (major == 3 and minor >= 11)
+    return major > 3 or (major == 3 and minor >= 8)
 
 
 def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> None:
@@ -59,7 +59,7 @@ def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> No
             "passwd",
         ]
 
-    api_reference = f"{C_GREEN}other hardcoded api key{C_END}" if other else f"{C_GREEN}{api}{C_END}"
+    api_reference = f"{C_GREEN}hardcoded api key{C_END}" if other else f"{C_GREEN}{api}{C_END}"
     print(f"Searching for {api_reference} references in files...")
 
     # Get the patterns to use
@@ -71,7 +71,7 @@ def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> No
         for file_path, line_numbers, api_keys, descriptions in results:
             print(f"\n{C_CYAN}{file_path}{C_END}:")
             for line_no, api_key, description in zip(line_numbers, api_keys, descriptions, strict=True):
-                # Wrap the API key to 100 characters
+                # wrap the API key to 100 characters
                 wrapped_api_key = textwrap.fill(api_key, width=100)
                 print(f"  {C_GREEN}Line {line_no}{C_END}: {C_YELLOW}{wrapped_api_key}{C_END} ({description})")
     else:
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not check_python_version():
-        print("Python version is less than 3.11")
+        print("Python version is less than 3.8")
         sys.exit(1)
 
     main(args.dirpath, args.api, args.other, args.exclude)
