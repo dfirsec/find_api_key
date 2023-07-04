@@ -16,14 +16,27 @@ Script utilizes standard Python libraries.
 
 ```text
 git clone https://github.com/dfirsec/find_api_key.git
+
+2. Change to the project directory:
+
+```text
+cd find_api_key
+```
+
+3. Install required packages using poetry:
+
+```text
+pip install poetry
+
+poetry install
 ```
 
 ## Usage
 
-1. Navigate to the project directory:
+1. Create the virtual environment
 
 ```text
-cd find_api_key
+poetry shell
 ```
 
 2. Run using the following commands:
