@@ -2,7 +2,7 @@
 
 ![Generic badge](https://img.shields.io/badge/python-3.8-blue.svg)
 
-This script scans a directory and identifies files that reference an API key.  By default, the script searches for matches that contain a key named 'api_key'. However, a custom key name can be specified as an argument.
+This script scans a directory and identifies files that reference an API key.  By default, the script searches for matches that contain keys named 'api key', 'apikey', 'api_key', 'api-key'. However, a custom key name can be specified as an argument.
 
 ## Prerequisites
 
@@ -55,30 +55,33 @@ This will scan the specified directory for custom key name references in files a
 > NOTE: The API key values below are bogus and were generated using [Generate Random](https://generate-random.org/).
 
 ```text
-Searching for api_key references in files...
+Searching for api key references in files...
 
-Files containing api_key references:
------------------------------------
+
 <DIRECTORY>\check_rep\settings.yml:
-  Lines 2: ms5xxvszc0obohd0iu04axtyz8yb28ndn (User API Key)
+  Lines 2:  api_key = ms5xxvszc0obohd0iu04axtyz8yb28ndn (User API Key)
+
 <DIRECTORY>\general_scripts\abuseipdb.py"
-  Line 20: ji4bh27m9chw1p2prica2qgmuhsyxqjfo4c30ntgxj0kx3w7s49gvq6fhvyvzt0v9rzwq4w17i61phnz (User API Key)
+  Line 20:  api_key = ji4bh27m9chw1p2prica2qgmuhsyxqjfo4c30ntgxj0kx3w7s49gvq6fhvyvzt0v9rzwq4w17i61phnz (User API Key)
+
 <DIRECTORY>\pythoncode\general\url_shortener.py:
-  Line 5: qe8s4jydfc0o3zw1mo1u8okbl6pqiy94pqerg (User API Key)
+  Line 5: api_key = qe8s4jydfc0o3zw1mo1u8okbl6pqiy94pqerg (User API Key)
+  Line 10: apikey=1865f519a63e158of3c893e59cc37fb12562e98a", (User API Key)
+
 <DIRECTORY>\shodan-scripts\androidcam\androidcam.py:
-  Line 9: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+  Line 9: apikey = z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+
 <DIRECTORY>\shodan-scripts\assets\assets.py:
-  Line 14: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+  Line 14: apikey = z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+
 <DIRECTORY>\shodan-scripts\cams\cams.py:
-  Line 15: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+  Line 15: apikey = z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+
 <DIRECTORY>\shodan-scripts\fos-streamer\fos.py:
-  Line 15: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+  Line 18: apikey = z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+
 <DIRECTORY>\shodan-scripts\IP Webcam\ipwebcam.py:
-  Line 17: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
-<DIRECTORY>\shodan-scripts\simplehttp\simple.py:
-  Line 19: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
-<DIRECTORY>\shodan-scripts\weblogic\weblogic.py:
-  Line 62: z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
+  Line 17: apikey = z719pelyjoa4nrs93mgsu01vnx97zhty (User API Key)
 ```
 
 

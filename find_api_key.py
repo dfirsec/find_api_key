@@ -1,6 +1,7 @@
 """Find API keys in a directory."""
 
 import argparse
+import re
 import sys
 import textwrap
 
@@ -59,11 +60,11 @@ def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> No
             "passwd",
         ]
 
-    api_reference = f"{C_GREEN}hardcoded api key{C_END}" if other else f"{C_GREEN}{api}{C_END}"
+    api_reference = f"{C_GREEN}hardcoded api key{C_END}" if other else f"{C_GREEN}api key{C_END}"
     print(f"Searching for {api_reference} references in files...")
 
     # Get the patterns to use
-    patterns = get_other_patterns() if other else get_patterns(api)
+    patterns = get_other_patterns() if other else get_patterns([api])
 
     results = find_api_key_references(dirpath, exclude_keywords, patterns)
 
@@ -84,9 +85,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--api",
         type=str,
-        default="api_key",
+        default="api[_ -]*key",
         required=False,
-        help="API key to search for. Default is 'api_key'.",
+        help="API key to search for. Default is match either 'api key', 'apikey', 'api_key', or 'api-key'.",
     )
     parser.add_argument("--other", action="store_true", help="Use other hardcoded patterns.")
     parser.add_argument(

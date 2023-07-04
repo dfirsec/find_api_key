@@ -18,10 +18,22 @@ with open(PATTERNS_FILEPATH, "rb") as patterns_file:
 PATTERNS = patterns_data["pattern"]
 
 
-def get_patterns(api: str) -> dict[str, list[tuple[Pattern[str], str]]]:
-    """Get the patterns for the user-specified API key."""
+def get_patterns(apis: list[str]) -> dict[str, list[tuple[Pattern[str], str]]]:
+    """Get the patterns for the user-specified API keys."""
     common_patterns: list[tuple[Pattern[str], str]] = [
-        (re.compile(rf"\b{api}\s*=\s*(.+)", re.IGNORECASE), "User API Key"),
+        (re.compile(rf"\b{api}\s*=\s*(.+)", re.IGNORECASE), "User API Key") for api in apis
+    ]
+
+    dockerfile_patterns: list[tuple[Pattern[str], str]] = [
+        (re.compile(rf"ENV\s+{api}\s*=\s*(.+)", re.IGNORECASE), "User API Key") for api in apis
+    ]
+
+    json_patterns: list[tuple[Pattern[str], str]] = [
+        (re.compile(rf"\"{api}\"\s*:\s*\"(.+)\"", re.IGNORECASE), "User API Key") for api in apis
+    ]
+
+    xml_patterns: list[tuple[Pattern[str], str]] = [
+        (re.compile(rf"<{api}>\s*(.*)\s*</{api}>", re.IGNORECASE), "User API Key") for api in apis
     ]
 
     return {
@@ -30,14 +42,14 @@ def get_patterns(api: str) -> dict[str, list[tuple[Pattern[str], str]]]:
         ".conf": common_patterns,
         ".config": common_patterns,
         ".cs": common_patterns,
-        ".dockerfile": [(re.compile(rf"ENV\s+{api}\s*=\s*(.+)", re.IGNORECASE), "User API Key")],
+        ".dockerfile": dockerfile_patterns,
         ".env": common_patterns,
         ".gemspec": common_patterns,
         ".go": common_patterns,
         ".ini": common_patterns,
         ".java": common_patterns,
         ".js": common_patterns,
-        ".json": [(re.compile(rf"\"{api}\"\s*:\s*\"(.+)\"", re.IGNORECASE), "User API Key")],
+        ".json": json_patterns,
         ".php": common_patterns,
         ".properties": common_patterns,
         ".ps1": common_patterns,
@@ -47,7 +59,7 @@ def get_patterns(api: str) -> dict[str, list[tuple[Pattern[str], str]]]:
         ".swift": common_patterns,
         ".toml": common_patterns,
         ".txt": common_patterns,
-        ".xml": [(re.compile(rf"<{api}>\s*(.*)\s*</{api}>", re.IGNORECASE), "User API Key")],
+        ".xml": xml_patterns,
         ".yaml": common_patterns,
         ".yml": common_patterns,
     }
