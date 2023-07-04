@@ -10,12 +10,11 @@ Python 3.8 or higher
 
 ## Installation
 
-Script utilizes standard Python libraries.
-
 1. Clone the repository:
 
 ```text
 git clone https://github.com/dfirsec/find_api_key.git
+```
 
 2. Change to the project directory:
 
