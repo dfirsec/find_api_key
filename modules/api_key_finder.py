@@ -34,4 +34,3 @@ def find_api_key_references(
         pool.join()
 
     return [result for result in all_results if result and result[0] != current_script_path]
-

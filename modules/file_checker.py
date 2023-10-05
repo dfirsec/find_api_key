@@ -137,7 +137,7 @@ def check_file(
                 if match:
                     api_key = match.group()
                     # Split at declarator (= or :) and take the part after the declarator.
-                    api_value = re.split(r"=|:", api_key, 1, flags=re.IGNORECASE)[-1].strip()
+                    api_value = re.split(r"=|:", api_key, maxsplit=1, flags=re.IGNORECASE)[-1].strip()
                     if (
                         api_value
                         and api_value not in ('""', '"', "''", "'")  # exclude empty strings and empty quotes

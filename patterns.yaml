@@ -35,6 +35,8 @@ pattern:
   regex: '[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com'
 - name: Google OAuth Access Token
   regex: ya29\.[0-9A-Za-z_\-]+
+- name: IP Stack
+  regex: \?access_key=[0-9a-zA-Z]{32}
 - name: JSON Web Token
   regex: (ey[0-9a-z]{30,34}\.ey[0-9a-z\/_\-]{30,}\.[0-9a-zA-Z\/_\-]{10,}={0,2})
 - name: LinkedIn Client ID

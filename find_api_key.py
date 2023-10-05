@@ -1,19 +1,15 @@
 """Find API keys in a directory."""
 
 import argparse
-import re
 import sys
 import textwrap
 
 from modules.api_key_finder import find_api_key_references
 from modules.pattern_seeker import get_other_patterns
 from modules.pattern_seeker import get_patterns
+from rich.console import Console
 
-# ANSI escape sequences for colored output
-C_CYAN = "\033[96m"
-C_GREEN = "\033[92m"
-C_YELLOW = "\033[93m"
-C_END = "\033[0m"
+console = Console(highlight=False)
 
 
 def check_python_version() -> bool:
@@ -60,23 +56,24 @@ def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> No
             "passwd",
         ]
 
-    api_reference = f"{C_GREEN}hardcoded api key{C_END}" if other else f"{C_GREEN}api key{C_END}"
-    print(f"Searching for {api_reference} references in files...")
+    api_reference = "hardcoded api key" if other else "api key"
+    with console.status(f"Searching for [green]{api_reference}[/green] references in files..."):
+        # Get the patterns to use
+        patterns = get_other_patterns() if other else get_patterns([api])
 
-    # Get the patterns to use
-    patterns = get_other_patterns() if other else get_patterns([api])
+        results = find_api_key_references(dirpath, exclude_keywords, patterns)
 
-    results = find_api_key_references(dirpath, exclude_keywords, patterns)
-
-    if results:
-        for file_path, line_numbers, api_keys, descriptions in results:
-            print(f"\n{C_CYAN}{file_path}{C_END}:")
-            for line_no, api_key, description in zip(line_numbers, api_keys, descriptions, strict=True):
-                # wrap the API key to 100 characters
-                wrapped_api_key = textwrap.fill(api_key, width=100)
-                print(f"  {C_GREEN}Line {line_no}{C_END}: {C_YELLOW}{wrapped_api_key}{C_END} ({description})")
-    else:
-        print("No API keys found.")
+        if results:
+            for file_path, line_numbers, api_keys, descriptions in results:
+                console.print(f"\n[cyan]{file_path}[/cyan]:")
+                for line_no, api_key, description in zip(line_numbers, api_keys, descriptions, strict=True):
+                    # wrap the API key to 100 characters
+                    wrapped_api_key = textwrap.fill(api_key, width=100)
+                    console.print(
+                        f"  [green]Line {line_no}[/green]: [yellow]{wrapped_api_key}[/yellow] ({description})",
+                    )
+        else:
+            console.print("No API keys found.", style="bright_white")
 
 
 if __name__ == "__main__":
@@ -101,7 +98,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not check_python_version():
-        print("Python version is less than 3.8")
+        console.print("Python version is less than 3.8", style="red")
         sys.exit(1)
 
     main(args.dirpath, args.api, args.other, args.exclude)
