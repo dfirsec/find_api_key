@@ -99,7 +99,7 @@ Searching for api key references in files...
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvement, please create an issue or submit a pull request.
+If you find any issues or have suggestions for improvement, please create an issue or submit a pull request.
 
 ## License
 
