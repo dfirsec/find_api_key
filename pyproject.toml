@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "find-api-key"
-version = "0.1.0"
+version = "0.1.1"
 description = "Find API keys within a given directory."
 authors = ["Mitch Haddadi <12067255+dfirsec@users.noreply.github.com>"]
 license = "MIT"
@@ -9,8 +9,8 @@ packages = [{include = "find_api_key"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-"ruamel.yaml" = "^0.17.32"
-
+rich = "^13.7.1"
+"ruamel.yaml" = "^0.18.6"
 
 [build-system]
 requires = ["poetry-core"]

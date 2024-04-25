@@ -6,7 +6,7 @@ This script scans a directory and identifies files that reference an API key.  B
 
 ## Prerequisites
 
-Python 3.8 or higher
+Python 3.11 or higher
 
 ## Installation
 
