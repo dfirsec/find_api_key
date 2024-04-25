@@ -61,9 +61,7 @@ def main(dirpath: str, api: str, other: bool, exclude_keywords: list[str]) -> No
         # Get the patterns to use
         patterns = get_other_patterns() if other else get_patterns([api])
 
-        results = find_api_key_references(dirpath, exclude_keywords, patterns)
-
-        if results:
+        if results := find_api_key_references(dirpath, exclude_keywords, patterns):
             for file_path, line_numbers, api_keys, descriptions in results:
                 console.print(f"\n[cyan]{file_path}[/cyan]:")
                 for line_no, api_key, description in zip(line_numbers, api_keys, descriptions, strict=True):
@@ -98,7 +96,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not check_python_version():
-        console.print("Python version is less than 3.8", style="red")
+        console.print("Python version is less than 3.9", style="red")
         sys.exit(1)
 
     main(args.dirpath, args.api, args.other, args.exclude)

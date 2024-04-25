@@ -130,11 +130,10 @@ def check_file(
     exclude_keywords_set = {keyword.lower() for keyword in exclude_keywords}
 
     # Open the file and check each line
-    with open(file_path, encoding="utf-8", errors="ignore") as file:
+    with Path(file_path).open(encoding="utf-8", errors="ignore") as file:
         for line_no, line in enumerate(file, start=1):
             for pattern, description in patterns:
-                match = pattern.search(line)
-                if match:
+                if match := pattern.search(line):
                     api_key = match.group()
                     # Split at declarator (= or :) and take the part after the declarator.
                     api_value = re.split(r"=|:", api_key, maxsplit=1, flags=re.IGNORECASE)[-1].strip()

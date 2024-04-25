@@ -11,7 +11,7 @@ yaml = YAML()
 PATTERNS_FILEPATH = str(Path(__file__).parent.parent / "patterns.yaml")
 
 # Read the TOML file
-with open(PATTERNS_FILEPATH, "rb") as patterns_file:
+with Path(PATTERNS_FILEPATH).open("rb") as patterns_file:
     patterns_data = yaml.load(patterns_file)
 
 # Get patterns from the loaded patterns data
